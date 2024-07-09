@@ -36,7 +36,7 @@ jobs:
           ./gradlew createMojmapPaperclipJar
       - name: "Copy jar to staging"
         run: mkdir staging && cp build/libs/*.jar staging
-      - uses: "softprops/action-gh-release@v3"
+      - uses: "softprops/action-gh-release@v2"
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
