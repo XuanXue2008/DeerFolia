@@ -41,3 +41,7 @@ jobs:
         with:
           files: |
             staging/*.jar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: server
+          path: build/libs
