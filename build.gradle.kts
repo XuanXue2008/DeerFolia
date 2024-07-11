@@ -85,30 +85,3 @@ paperweight {
         }
     }
 }
-
-tasks.register("updateFoliaRef") {
-    // 更新 Folia 依赖的最新 commit
-    val tempDir = layout.cacheDir("foliaRefLatest")
-    val file = "gradle.properties"
-
-    doFirst {
-        val foliaLatestCommitJson = layout.cache.resolve("foliaLatestCommit.json")
-        download.get().download("https://ssl.lunadeer.cn:14446/api/v1/repos/mirror/Folia/commits?sha=master", foliaLatestCommitJson)
-        val foliaLatestCommit = gson.fromJson<paper.libs.com.google.gson.JsonArray>(foliaLatestCommitJson).get(0).asJsonObject.get("sha").asString
-
-        copy {
-            from(file)
-            into(tempDir)
-            filter { line: String ->
-                line.replace("foliaRef = .*".toRegex(), "foliaRef = $foliaLatestCommit")
-            }
-        }
-    }
-
-    doLast {
-        copy {
-            from(tempDir.file("gradle.properties"))
-            into(project.file(file).parent)
-        }
-    }
-}
